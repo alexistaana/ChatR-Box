@@ -1,4 +1,4 @@
-# Chat'R
+# Chat'R Box
 
 ## A simple chatroom app used to display the functionality of socket.io
 
