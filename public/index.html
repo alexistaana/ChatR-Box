@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="chatBox.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/40f80a8f17.js" crossorigin="anonymous"></script>
+    <title>R'Chat</title>
+</head>
+
+<body>
+    <div id="chatroom">
+
+        <!-- CHAT BOX -->
+        <div id="chatBox">
+            <!-- Message Area -->
+            <div id="inputLogs">
+            </div>
+
+            <!-- Input Area -->
+            <form action="" id="inputForm">
+                <input type="text" name="message" placeholder="Enter message..." id="msgForm">
+                </input>
+
+                <!-- Send Button -->
+                <button id="sendButton">
+                    <i class="fas fa-arrow-alt-circle-up" id="arrowImg"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- User List -->
+        <div id="userList">
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+
+</body>
+
+</html>
