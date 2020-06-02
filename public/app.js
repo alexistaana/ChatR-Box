@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    let socket = io();
+    let socket;
     class User {
         constructor(name, id) {
             this.name = name;
@@ -9,12 +9,19 @@ $(document).ready(function () {
     }
     let user = new User();
 
+    // watches if user enters a name
     function WatchEnterUser() {
         $('#formInputName').submit(e => {
             e.preventDefault();
-            user.name = $('#inputName').val();
-            $('#inputName').val('');
+            
+            // Connects to server
+            socket = io();
 
+            const name = $(e.currentTarget).find('#inputName');
+            user.name = name.val();
+            name.val('');
+
+            // Grabs user connected id
             socket.on('connect', (e) => {
                 user.id = socket.id;
             })
@@ -26,6 +33,7 @@ $(document).ready(function () {
         });
     }
 
+    // Function to load chatroom
     function LoadChatroom() {
         const chtroom = 
         `<div id="chatroom">
@@ -62,7 +70,7 @@ $(document).ready(function () {
         $('body').prepend(chtroom);
     }
 
-
+    // Emits Messages to the server
     function EmitAndGrabMessage() {
 
         let tempMsg;
@@ -71,12 +79,12 @@ $(document).ready(function () {
             e.preventDefault();
             const msg = $(e.currentTarget).find('#msgForm');
             tempMsg = msg.val();
-            socket.emit('sent message', tempMsg);
+            socket.emit('message', tempMsg);
             msg.val('');
             return false;
         });
 
-        socket.on('sent message', (e) => {
+        socket.on('message', (e) => {
             let addChatBubble;
             if (e != tempMsg) {
                 addChatBubble = 
@@ -102,6 +110,7 @@ $(document).ready(function () {
         });
     }
 
+    // Run functions
     function Init() {
         WatchEnterUser();
     }
