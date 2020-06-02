@@ -21,14 +21,14 @@ io.on('connection', function(socket){
     console.log('Host Id Connected: ', socket.id);
     let tempId = socket.id;
 
+    // Sends message to server user dced
     socket.on('disconnect', (e) => {
         console.log('Host Id Disconnected: ', tempId);
     })
-});
 
-io.on('connection', function(socket) {
-    socket.on('sent message', (msg) => {
-        io.emit('sent message', msg)
+    // Emits message sent from user to clientside users 
+    socket.on('message', (msg) => {
+        io.emit('message', msg)
         console.log('message: ' + msg);
     })
-})
+});
