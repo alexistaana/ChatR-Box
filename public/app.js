@@ -79,10 +79,22 @@ $(document).ready(function () {
         socket.on('sent message', (e) => {
             let addChatBubble;
             if (e != tempMsg) {
-                addChatBubble = '<div class="chatBubble receive"><p class="chatMsg">' + e + '</p></div>'
+                addChatBubble = 
+                `
+                <div class="chatBubble receive">
+                    <p class="chatMsg">` + e + `</p>
+                </div>
+                <label for="chatBubble" class="chatLabelReceive"">${}</label>
+                `
             }
             else {
-                addChatBubble = '<div class="chatBubble send"><p class="chatMsg">' + e + '</p></div>'
+                addChatBubble = 
+                `
+                <div class="chatBubble send">
+                    <p class="chatMsg">` + e + `</p>
+                </div>
+                <label for="chatBubble" class="chatLabelSend"">${}</label>
+                `
             }
 
             $('#inputLogs').append(addChatBubble);

@@ -146,3 +146,18 @@ body{
     width: 50%;
     height: 50px;
 }
+
+.chatLabelReceive, .chatLabelSend{
+    color: grey;
+    margin-left: 27px;
+    font-size: 12px;
+    
+}
+ 
+.chatLabelReceive{
+    float: left;
+}
+
+.chatLabelSend{
+    float: right;    
+}
