@@ -12,37 +12,24 @@
 </head>
 
 <body>
-    <div id="chatroom">
-        <!-- CHAT BOX -->
-        <div id="chatBox">
-            <!-- Message Area -->
-            <div id="inputLogs">
-            </div>
 
-            <!-- Input Area -->
-            <form action="" id="inputForm">
-                <input type="text" name="message" placeholder="Enter message..." id="msgForm">
-                </input>
-
-                <!-- Send Button -->
-                <button id="sendButton">
-                    <i class="fas fa-arrow-alt-circle-up" id="arrowImg"></i>
-                </button>
-            </form>
-        </div>
-
-        <!-- User List -->
-        <div id="userList">
-            <!-- <div class="users">Billy</div>
-            <div class="users">Billy</div>
-            <div class="users">Billy</div> -->
-        </div>
+    <div id="outUserBox">
+        <h1 id="headerName">Please Enter Your Name!</h1>
+        <form id="formInputName">
+            <input id="inputName" placeholder="Username" required=""/>
+            <button id="nameBtn">Enter</button>
+        </form>
     </div>
+
+    <!-- <form id="outUserBox">
+        <input/>
+        <button></button>
+    </form> -->
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="app.js"></script>
-
 </body>
 
 </html>
