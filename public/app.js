@@ -1,18 +1,25 @@
 $(document).ready(function () {
 
-    function EmitMessage() {
+    let socket = io();
 
-        var socket = io();
+    function GetName(){
+        socket.on('connect', (e) => {
+            console.log(socket.id)
+        })
+    }   
+    
+    function EmitAndGrabMessage() {
+
         let tempMsg;
-
-        $('form').submit(function () {
+  
+        $('form').submit( () => {
             socket.emit('sent message', $('#msgForm').val());
             tempMsg = $('#msgForm').val();
             $('#msgForm').val('');
             return false;
         });
 
-        socket.on('sent message', function (e) {
+        socket.on('sent message', (e) => {
             let addChatBubble;
             if (e != tempMsg) {
                 addChatBubble = '<div class="chatBubble receive"><p class="chatMsg">' + e + '</p></div>'
@@ -26,5 +33,10 @@ $(document).ready(function () {
         });
     }
 
-    EmitMessage();
+    function Init(){
+        GetName();
+        EmitAndGrabMessage(); 
+    }  
+
+    Init();
 })
