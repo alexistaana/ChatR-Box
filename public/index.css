@@ -223,3 +223,7 @@ body{
     padding: 8px;
     text-transform: uppercase;
 }
+
+#inputName{
+    text-align: center;
+}
