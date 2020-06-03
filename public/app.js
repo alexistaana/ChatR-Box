@@ -155,8 +155,11 @@ $(document).ready(function () {
                 `
             }
 
+            const messageList = $('#messageList');
+            messageListHeight = messageList[0].scrollHeight;
+
             $('#messageList').append(addChatBubble);
-            window.scrollTo(0, document.body.scrollHeight);
+            $('#messageList').scrollTop(messageListHeight);
         });
     }
 
