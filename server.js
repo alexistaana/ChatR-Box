@@ -2,7 +2,6 @@ const PORT = process.env.PORT || 8080;
 
 const express = require('express');
 const socket = require('socket.io');
-
 const app = express();
 
 app.use(express.static('public'))
@@ -22,11 +21,8 @@ io.on('connection', function(socket){
     console.log('Host Id Connected: ', socket.id);
     let tempId = socket.id;
 
-    // Sends message to server user dced
-    socket.on('disconnect', (e) => {
-        
-        
-        console.log('Host Id Disconnected: ', tempId);
+    socket.on('userIndex', userIndex => {
+        console.log(userIndex)
     })
 
     // Emits message sent from user to clientside users 
@@ -38,5 +34,20 @@ io.on('connection', function(socket){
     socket.on('user list update' , (user) => {
         users.push(user);
         io.emit('user list update', users);
+    })
+
+
+    // Sends message to server user dced
+    socket.on('disconnect', (e) => {
+        
+        for(let i = 0; i < users.length; i++){
+            if(users[i].id == tempId){
+                users.splice(i, 1);
+            }
+        }
+
+        io.emit('disconnect', users);
+        
+        console.log('Host Id Disconnected: ', tempId);
     })
 });

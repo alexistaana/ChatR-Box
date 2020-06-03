@@ -9,12 +9,13 @@ $(document).ready(function () {
         }
     }
     let user = new User();
+    let userIndex;
 
     // watches if user enters a name
     function WatchEnterUser() {
         $('#formInputName').submit(e => {
             e.preventDefault();
-            
+
             // Connects to server
             socket = io();
 
@@ -31,38 +32,55 @@ $(document).ready(function () {
                 // Add connected user to the list of users online
                 AddUserToUserList();
             })
-            
+
             // Watches/Calls to grab message and send to server
             EmitAndGrabMessage();
+
+            // Moshi
+            DeleteUserFromList();
         });
     }
 
-    function AddUserToUserList(){
+    function AddUserToUserList() {
         socket.emit('user list update', user);
-        
-        socket.on('user list update', e => {    
+
+        socket.on('user list update', e => {
             let userAdd;
 
             $('#userList').empty();
 
-            for(let i = 0; i < e.length; i++)
-            {
+            for (let i = 0; i < e.length; i++) {
                 userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
                 $('#userList').append(userAdd);
+
+                if (user.id == e.id) {
+                    userIndex = i;
+                }
             }
         })
     }
 
-    function DeleteUserFromList(){
-        socket.on('disconnect', user => {
-            
+    function DeleteUserFromList() {
+        socket.on('disconnect', e => {
+            let userAdd;
+
+            $('#userList').empty();
+
+            for (let i = 0; i < e.length; i++) {
+                userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
+                $('#userList').append(userAdd);
+
+                if (user.id == e.id) {
+                    userIndex = i;
+                }
+            }
         })
     }
 
     // Function to load chatroom
     function LoadChatroom() {
-        const chtroom = 
-        `
+        const chtroom =
+            `
         <!-- CHAT BOX -->
         <div id="chatroom">
     
@@ -119,8 +137,8 @@ $(document).ready(function () {
 
 
             if (e.id != user.id) {
-                addChatBubble = 
-                `
+                addChatBubble =
+                    `
                 <div class="chatBubble receive">
                     <p class="chatMsg">${e.message}</p>
                 </div>
@@ -128,8 +146,8 @@ $(document).ready(function () {
                 `
             }
             else {
-                addChatBubble = 
-                `
+                addChatBubble =
+                    `
                 <div class="chatBubble send">
                     <p class="chatMsg">${e.message}</p>
                 </div>
