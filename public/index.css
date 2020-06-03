@@ -208,6 +208,8 @@ body{
     width: 100%;
     padding-bottom: 7%;
     font-size: 24px;
+    font-weight: normal;
+    text-transform: uppercase;
 }
 
 #userList{
@@ -219,4 +221,5 @@ body{
 
 .userName{
     padding: 8px;
+    text-transform: uppercase;
 }

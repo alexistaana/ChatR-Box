@@ -40,7 +40,7 @@ $(document).ready(function () {
     function AddUserToUserList(){
         socket.emit('user list update', user);
         
-        socket.on('user list update', (e) => {    
+        socket.on('user list update', e => {    
             let userAdd;
 
             $('#userList').empty();
@@ -50,13 +50,13 @@ $(document).ready(function () {
                 userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
                 $('#userList').append(userAdd);
             }
-
-            
         })
     }
 
-    function RemoveUserFromList(){
-
+    function DeleteUserFromList(){
+        socket.on('disconnect', user => {
+            
+        })
     }
 
     // Function to load chatroom

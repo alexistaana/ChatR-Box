@@ -24,6 +24,8 @@ io.on('connection', function(socket){
 
     // Sends message to server user dced
     socket.on('disconnect', (e) => {
+        
+        
         console.log('Host Id Disconnected: ', tempId);
     })
 
