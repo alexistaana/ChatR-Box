@@ -16,8 +16,9 @@ let server = app.listen(PORT, function(){
 
 let io = socket(server);
 let users = [];
+let disconnectedUser;
 
-io.on('connection', function(socket){
+io.on('connection', socket => {
     console.log('Host Id Connected: ', socket.id);
     let tempId = socket.id;
 
@@ -26,28 +27,33 @@ io.on('connection', function(socket){
     })
 
     // Emits message sent from user to clientside users 
-    socket.on('message', (user) => {
+    socket.on('message', user => {
         io.emit('message', user);
         console.log(user.name + '('+ user.id + ')' + ': ' + user.message);
     })
 
-    socket.on('user list update' , (user) => {
+    socket.on('user list update' , user => {
         users.push(user);
         io.emit('user list update', users);
     })
 
+    socket.on('announce name', announce => {
+        io.emit('announce name', announce)
+    })
+
 
     // Sends message to server user dced
-    socket.on('disconnect', (e) => {
+    socket.on('disconnect', e => {
         
         for(let i = 0; i < users.length; i++){
             if(users[i].id == tempId){
+                disconnectedUser = users[i].name;
                 users.splice(i, 1);
             }
         }
 
-        io.emit('disconnect', users);
+        io.emit('disconnect', users, disconnectedUser);
         
-        console.log('Host Id Disconnected: ', tempId);
+        console.log('Host Id Disconnected: ', tempId, "User: ", disconnectedUser);
     })
 });

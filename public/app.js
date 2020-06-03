@@ -31,12 +31,12 @@ $(document).ready(function () {
                 user.id = socket.id;
                 // Add connected user to the list of users online
                 AddUserToUserList();
+                AnnounceUserEntrance();
             })
 
             // Watches/Calls to grab message and send to server
             EmitAndGrabMessage();
 
-            // Moshi
             DeleteUserFromList();
         });
     }
@@ -53,28 +53,66 @@ $(document).ready(function () {
                 userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
                 $('#userList').append(userAdd);
 
-                if (user.id == e.id) {
+                if (e.id == user.id) {
                     userIndex = i;
                 }
             }
         })
     }
 
+    function AnnounceUserEntrance() {
+        const intro =
+            [
+                `Look out it's <b class="introUser">${user.name}</b> coming through!`,
+                `<b class="introUser">${user.name}</b> came here to chat and chew bubblegum, he's all of out gum.`,
+                `It's a bird! It's a plane! NO IT'S <b class="introUser">${user.name}</b>!`,
+                `It's <b class="introUser">${user.name}</b>, first of her name, Queen of the Andals and the First Men, Breaker of Chains, Khaleesi of the Great Grass Sea.`,
+                `Here's <b class="introUser">${user.name}</b>, the King of the North!`,
+                `<b class="introUser">${user.name}</b>: YOU SHALL NOT PASS!!`,
+                `<b class="introUser">${user.name}</b> brought his sword, bow and axe to this fellowship.`
+            ]
+
+        let randomNum = Math.floor(Math.random() * 7);
+
+        const announce = `<div class="announcement">${intro[randomNum]}</div>`
+
+        socket.emit('announce name', announce);
+
+        socket.on('announce name', e => {
+            $('#messageList').append(e);
+        })
+    }
+
+    function AnnounceUserExit (e) {
+        let randomNum = Math.floor(Math.random() * 4);
+
+        const exit =
+            [
+                `if(!<b class="exitUser">${e}</b>){ cout << "GOODBYE!"}`,
+                `All of <b class="exitUser">${e}</b> Argon!`,
+                `See you in a 0001, <b class="exitUser">${e}</b>!`,
+                `<b class="exitUser">${e}</b> byte the dust.`
+            ]
+        const announce = `<div class="announcement">${exit[randomNum]}</div>`
+
+        $('#messageList').append(announce);
+    }
+
     function DeleteUserFromList() {
-        socket.on('disconnect', e => {
+
+        socket.on('disconnect', (e, disconnectedUser) => {
             let userAdd;
 
+            // Updates List
             $('#userList').empty();
-
             for (let i = 0; i < e.length; i++) {
                 userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
                 $('#userList').append(userAdd);
-
-                if (user.id == e.id) {
-                    userIndex = i;
-                }
             }
+
+            AnnounceUserExit(disconnectedUser);
         })
+
     }
 
     // Function to load chatroom
@@ -132,9 +170,6 @@ $(document).ready(function () {
 
         socket.on('message', (e) => {
             let addChatBubble;
-
-            console.log(e);
-
 
             if (e.id != user.id) {
                 addChatBubble =

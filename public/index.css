@@ -159,11 +159,13 @@ body{
 .chatLabelReceive{
     float: left;
     margin-left: 27px;
+    margin-right: 100%;
 }
 
 .chatLabelSend{
     float: right;    
     margin-right: 27px;
+    margin-left: 100%;
 }
 
 #userBox{
@@ -227,4 +229,20 @@ body{
 
 #inputName{
     text-align: center;
+}
+
+.announcement{
+    text-align: center;
+    color: grey;
+    font-size: 12px;
+    margin: 28px;
+}
+
+#introUser{
+    font-weight: bolder;
+}
+
+.introUser, .exitUser{
+    color: #cccccc;
+    text-transform: uppercase;
 }
