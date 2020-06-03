@@ -2,9 +2,10 @@ $(document).ready(function () {
 
     let socket;
     class User {
-        constructor(name, id) {
+        constructor(name, id, message) {
             this.name = name;
             this.id = id;
+            this.message = message;
         }
     }
     let user = new User();
@@ -73,35 +74,37 @@ $(document).ready(function () {
     // Emits Messages to the server
     function EmitAndGrabMessage() {
 
-        let tempMsg;
-
         $('#inputForm').submit(e => {
             e.preventDefault();
             const msg = $(e.currentTarget).find('#msgForm');
-            tempMsg = msg.val();
-            socket.emit('message', tempMsg);
+            user.message = msg.val();
+            socket.emit('message', user);
             msg.val('');
             return false;
         });
 
         socket.on('message', (e) => {
             let addChatBubble;
-            if (e != tempMsg) {
+
+            console.log(e);
+
+
+            if (e.id != user.id) {
                 addChatBubble = 
                 `
                 <div class="chatBubble receive">
-                    <p class="chatMsg">` + e + `</p>
+                    <p class="chatMsg">${e.message}</p>
                 </div>
-                <label for="chatBubble" class="chatLabelReceive"">${}</label>
+                <label for="chatBubble" class="chatLabelReceive"">${e.name}</label>
                 `
             }
             else {
                 addChatBubble = 
                 `
                 <div class="chatBubble send">
-                    <p class="chatMsg">` + e + `</p>
+                    <p class="chatMsg">${e.message}</p>
                 </div>
-                <label for="chatBubble" class="chatLabelSend"">${}</label>
+                <label for="chatBubble" class="chatLabelSend">${e.name}</label>
                 `
             }
 

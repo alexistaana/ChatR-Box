@@ -27,8 +27,8 @@ io.on('connection', function(socket){
     })
 
     // Emits message sent from user to clientside users 
-    socket.on('message', (msg) => {
-        io.emit('message', msg)
-        console.log('message: ' + msg);
+    socket.on('message', (user) => {
+        io.emit('message', user)
+        console.log(user.name + '('+ user.id + ')' + ' ' + user.message);
     })
 });
