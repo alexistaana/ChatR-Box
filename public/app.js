@@ -22,45 +22,74 @@ $(document).ready(function () {
             user.name = name.val();
             name.val('');
 
+            // Loads chatroom on browser
+            LoadChatroom();
+
             // Grabs user connected id
             socket.on('connect', (e) => {
                 user.id = socket.id;
+                // Add connected user to the list of users online
+                AddUserToUserList();
             })
-
-            // Loads chatroom on browser
-            LoadChatroom();
+            
             // Watches/Calls to grab message and send to server
             EmitAndGrabMessage();
         });
     }
 
+    function AddUserToUserList(){
+        socket.emit('user list update', user);
+        
+        socket.on('user list update', (e) => {    
+            let userAdd;
+
+            $('#userList').empty();
+
+            for(let i = 0; i < e.length; i++)
+            {
+                userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
+                $('#userList').append(userAdd);
+            }
+
+            
+        })
+    }
+
+    function RemoveUserFromList(){
+
+    }
+
     // Function to load chatroom
     function LoadChatroom() {
         const chtroom = 
-        `<div id="chatroom">
+        `
         <!-- CHAT BOX -->
-            <div id="chatBox">
-                <!-- Message Area -->
-                <div id="inputLogs">
+        <div id="chatroom">
+    
+            <!-- User List -->
+            <div id="userBox">
+                <h1 id="userListHeader">Users</h1>
+                <div id="userList">
                 </div>
-
+            </div>
+    
+            <!-- ChatArea -->
+            <div id="inputLogs">
+    
+                <div id="messageList">
+                </div>
+    
                 <!-- Input Area -->
                 <form action="#" id="inputForm">
                     <input type="text" name="message" placeholder="Enter message..." id="msgForm">
                     </input>
-
+    
                     <!-- Send Button -->
                     <button id="sendButton">
                         <i class="fas fa-arrow-alt-circle-up" id="arrowImg"></i>
                     </button>
                 </form>
-            </div>      
-        
-            <!-- User List -->
-            <div id="userList">
-                <!-- <div class="users">Billy</div>
-                <div class="users">Billy</div>
-                <div class="users">Billy</div> -->
+    
             </div>
         </div>
         `
@@ -108,7 +137,7 @@ $(document).ready(function () {
                 `
             }
 
-            $('#inputLogs').append(addChatBubble);
+            $('#messageList').append(addChatBubble);
             window.scrollTo(0, document.body.scrollHeight);
         });
     }

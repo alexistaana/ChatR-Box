@@ -16,6 +16,7 @@ let server = app.listen(PORT, function(){
 })
 
 let io = socket(server);
+let users = [];
 
 io.on('connection', function(socket){
     console.log('Host Id Connected: ', socket.id);
@@ -28,7 +29,12 @@ io.on('connection', function(socket){
 
     // Emits message sent from user to clientside users 
     socket.on('message', (user) => {
-        io.emit('message', user)
-        console.log(user.name + '('+ user.id + ')' + ' ' + user.message);
+        io.emit('message', user);
+        console.log(user.name + '('+ user.id + ')' + ': ' + user.message);
+    })
+
+    socket.on('user list update' , (user) => {
+        users.push(user);
+        io.emit('user list update', users);
     })
 });
