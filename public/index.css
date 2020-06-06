@@ -29,8 +29,9 @@ body{
     box-shadow: 4px 4px 3px rgba(10, 8, 8, 0.192);
     font-size: 12px;
     padding: .5% 1% .5% 1%;
-    width: 30%;
     text-align: center;
+    min-width: 20%;
+    max-width: 35%;
 }
 
 .send{
@@ -165,11 +166,11 @@ body{
 
 .chatLabelSend{
     float: right;    
-    margin-right: 27px;
+    margin-right: 37px;
     margin-left: 100%;
 }
 
-#userBox{
+#miscBox{
     width: 20%;
     height: 100%;
     padding: 0;
@@ -214,11 +215,12 @@ body{
     font-size: 24px;
     font-weight: normal;
     text-transform: uppercase;
+    margin: 0;
 }
 
 #userList{
-    width: 100%;
-    height: 100%;
+    width:100%;
+    height: 50%;
     color: whitesmoke;
     text-align: center;
 }
@@ -246,4 +248,46 @@ body{
 .introUser, .exitUser{
     color: #cccccc;
     text-transform: uppercase;
+}
+
+#settingsBox{
+    width: 100%;
+    height: 50%;
+    background-color: none; 
+    border-top: solid white;
+    color: whitesmoke;
+}
+
+.settingsHeader{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.colorSettingsBox{
+    width: 100%;
+    height: 10%;
+    background-color: none;
+    text-align: center;
+    align-items: center;
+}
+
+.bubbleBox{
+    height: 100%;
+    width: 30%;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#bubbleColorReceive, #bubbleColorSend, #textColorReceive, #textColorSend{
+    display: inline-block;
+}
+
+#bubbleColorReceive, #textColorReceive{
+    margin-right: 30px;
+}
+
+#bubbleColorSend, #textColorSend{
+    margin-left: 30px;
 }
