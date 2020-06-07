@@ -1,8 +1,14 @@
 $(document).ready(function () {
-
     let socket;
     let colorPickr;
-    let selectedPicker;
+    let selectedPickerText;
+    let selectedPickerMsg;
+    let changeColorTextReceive;
+    let changeColorTextSend;
+    let changeColorMsgReceive;
+    let changeColorMsgSend;
+    let TextOrMsg;
+
     class User {
         constructor(name, id, message) {
             this.name = name;
@@ -37,11 +43,12 @@ $(document).ready(function () {
             })
 
 
+            let colorDef = [`rgb(44, 40, 40)`, `#04b571`, `white`, `white`]
             // Initializes Color Selectors and watches for selector click
-            CreateBubbleReceiveColorPicker();
-            CreateBubbleSendColorPicker();
-            CreateTextReceiveSendColorPicker();
-            CreateTextReceiveSendColorPicker();
+
+            for (let i = 0; i < 4; i++) {
+                CreateColorPicker(colorDef[i]);
+            }
             WatchForColorSelector();
 
             // Watches/Calls to grab message and send to server
@@ -98,7 +105,7 @@ $(document).ready(function () {
 
         const exit =
             [
-                `if(!<b class="exitUser">${e}</b>){ cout << "GOODBYE!"}`,
+                `if(!<b class="exitUser">${e}</b>){ std::cout << "GOODBYE!"}`,
                 `All of <b class="exitUser">${e}</b> Argon!`,
                 `See you in a 0001, <b class="exitUser">${e}</b>!`,
                 `<b class="exitUser">${e}</b> byte the dust.`
@@ -128,7 +135,7 @@ $(document).ready(function () {
     // Function to load chatroom
     function LoadChatroom() {
         const chtroom =
-        `
+            `
         <!-- CHAT BOX -->
         <div id="chatroom">
 
@@ -231,46 +238,48 @@ $(document).ready(function () {
                 <label for="chatBubble" class="chatLabelSend">${e.name}</label>
                 `
             }
-
             const messageList = $('#messageList');
             messageListHeight = messageList[0].scrollHeight;
 
             $('#messageList').append(addChatBubble);
             $('#messageList').scrollTop(messageListHeight);
+
+            $(`.receiveMessage`).css('color', `${changeColorTextReceive}`);
+            $(`.sendMessage`).css('color', `${changeColorTextSend}`);
+            $(`.receive`).css('background-color', `${changeColorMsgReceive}`);
+            $(`.send`).css('background-color', `${changeColorMsgSend}`);
         });
     }
 
-    function CreateBubbleReceiveColorPicker(){
+    function CreateColorPicker(colorDef) {
         colorPickr = Pickr.create({
             el: '.colorpicker',
             theme: 'nano',
-            default: 'rgb(44, 40, 40);',
-        
+            default: `${colorDef}`,
+
             swatches: [
                 'rgba(244, 67, 54, 1)',
-                'rgba(233, 30, 99, 0.95)',
-                'rgba(156, 39, 176, 0.9)',
-                'rgba(103, 58, 183, 0.85)',
-                'rgba(63, 81, 181, 0.8)',
-                'rgba(33, 150, 243, 0.75)',
-                'rgba(3, 169, 244, 0.7)',
-                'rgba(0, 188, 212, 0.7)',
-                'rgba(0, 150, 136, 0.75)',
-                'rgba(76, 175, 80, 0.8)',
-                'rgba(139, 195, 74, 0.85)',
-                'rgba(205, 220, 57, 0.9)',
-                'rgba(255, 235, 59, 0.95)',
+                'rgba(233, 30, 99, 1)',
+                'rgba(156, 39, 176, 1)',
+                'rgba(103, 58, 183, 1)',
+                'rgba(63, 81, 181, 1)',
+                'rgba(33, 150, 243, 1)',
+                'rgba(3, 169, 244, 1)',
+                'rgba(0, 188, 212, 1)',
+                'rgba(0, 150, 136, 1)',
+                'rgba(76, 175, 80, 1)',
+                'rgba(139, 195, 74, 1)',
+                'rgba(205, 220, 57, 1)',
+                'rgba(255, 235, 59, 1)',
                 'rgba(255, 193, 7, 1)'
             ],
-        
+
             components: {
-        
-                // Main components
+
                 preview: true,
                 opacity: true,
                 hue: true,
-        
-                // Input / output Options
+
                 interaction: {
                     input: true,
                     clear: true,
@@ -278,125 +287,56 @@ $(document).ready(function () {
                 }
             }
         });
-    
-        colorPickr.on('change', (color, instance) =>{
-            let changeColor = color.toRGBA().toString();
-            $(`.${selectedPicker}`).css('background-color', `${changeColor}`);
-        })
-    }
 
-    function CreateBubbleSendColorPicker(){
-        colorPickr = Pickr.create({
-            el: '.colorpicker',
-            theme: 'nano',
-            default: '#04b571',
-        
-            swatches: [
-                'rgba(244, 67, 54, 1)',
-                'rgba(233, 30, 99, 0.95)',
-                'rgba(156, 39, 176, 0.9)',
-                'rgba(103, 58, 183, 0.85)',
-                'rgba(63, 81, 181, 0.8)',
-                'rgba(33, 150, 243, 0.75)',
-                'rgba(3, 169, 244, 0.7)',
-                'rgba(0, 188, 212, 0.7)',
-                'rgba(0, 150, 136, 0.75)',
-                'rgba(76, 175, 80, 0.8)',
-                'rgba(139, 195, 74, 0.85)',
-                'rgba(205, 220, 57, 0.9)',
-                'rgba(255, 235, 59, 0.95)',
-                'rgba(255, 193, 7, 1)'
-            ],
-        
-            components: {
-        
-                // Main components
-                preview: true,
-                opacity: true,
-                hue: true,
-        
-                // Input / output Options
-                interaction: {
-                    input: true,
-                    clear: true,
-                    save: true
+
+        colorPickr.on('change', (color, instance) => {
+
+            if (TextOrMsg == 'text') {
+                if (selectedPickerText == 'receiveMessage') {
+                    changeColorTextReceive = color.toRGBA().toString();
+                    $(`#textColorReceive .pickr button`).css('color', changeColorMsgReceive);
+                } else {
+                    changeColorTextSend = color.toRGBA().toString();
+                    $(`#textColorSend .pickr button`).css('color', changeColorTextSend);
                 }
-            }
-        });
-    
-        colorPickr.on('change', (color, instance) =>{
-            let changeColor = color.toRGBA().toString();
-            $(`.${selectedPicker}`).css('background-color', `${changeColor}`);
-        })
-    }
 
-    function CreateTextReceiveSendColorPicker(){
-        colorPickr = Pickr.create({
-            el: '.colorpicker',
-            theme: 'nano',
-            default: 'white',
-        
-            swatches: [
-                'rgba(244, 67, 54, 1)',
-                'rgba(233, 30, 99, 0.95)',
-                'rgba(156, 39, 176, 0.9)',
-                'rgba(103, 58, 183, 0.85)',
-                'rgba(63, 81, 181, 0.8)',
-                'rgba(33, 150, 243, 0.75)',
-                'rgba(3, 169, 244, 0.7)',
-                'rgba(0, 188, 212, 0.7)',
-                'rgba(0, 150, 136, 0.75)',
-                'rgba(76, 175, 80, 0.8)',
-                'rgba(139, 195, 74, 0.85)',
-                'rgba(205, 220, 57, 0.9)',
-                'rgba(255, 235, 59, 0.95)',
-                'rgba(255, 193, 7, 1)'
-            ],
-        
-            components: {
-        
-                // Main components
-                preview: true,
-                opacity: true,
-                hue: true,
-        
-                // Input / output Options
-                interaction: {
-                    input: true,
-                    clear: true,
-                    save: true
+                let changeColor = color.toRGBA().toString();
+                $(`.${selectedPickerText}`).css('color', changeColor);
+            } else {
+                if (selectedPickerMsg == 'receive') {
+                    changeColorMsgReceive = color.toRGBA().toString();
+                    $(`#bubbleColorReceive .pickr button`).css('color', changeColorMsgReceive);
+                } else {
+                    changeColorMsgSend = color.toRGBA().toString();
+                    $(`#bubbleColorSend .pickr button`).css('color', changeColorMsgSend);
                 }
-            }
-        });
-    
-        colorPickr.on('change', (color, instance) =>{
-            let changeColor = color.toRGBA().toString();
 
-            if(selectedPicker == 'receive' || selectedPicker == 'send'){
-                $(`.${selectedPicker}`).css('background-color', `${changeColor}`);
-            }
-            else if(selectedPicker == 'receiveMessage' || selectedPicker == 'sendMessage'){
-                $(`.${selectedPicker}`).css('color', `${changeColor}`);
+                let changeColor = color.toRGBA().toString();
+                $(`.${selectedPickerMsg}`).css('background-color', changeColor)
             }
         })
     }
 
-    function WatchForColorSelector(){
+    function WatchForColorSelector() {
         $('#bubbleColorReceive').on('click', e => {
             e.preventDefault();
-            selectedPicker = 'receive';
+            TextOrMsg = 'msg';
+            selectedPickerMsg = 'receive';
         })
         $('#bubbleColorSend').on('click', e => {
             e.preventDefault();
-            selectedPicker = 'send';
+            TextOrMsg = 'msg';
+            selectedPickerMsg = 'send';
         })
         $('#textColorReceive').on('click', e => {
             e.preventDefault();
-            selectedPicker = 'receiveMessage';
+            TextOrMsg = 'text';
+            selectedPickerText = 'receiveMessage';
         })
         $('#textColorSend').on('click', e => {
             e.preventDefault();
-            selectedPicker = 'sendMessage';
+            TextOrMsg = 'text';
+            selectedPickerText = 'sendMessage';
         })
     }
 
