@@ -43,7 +43,7 @@ $(document).ready(function () {
             })
 
 
-            let colorDef = [`rgb(44, 40, 40)`, `#04b571`, `white`, `white`]
+            let colorDef = [`#1AC8DB`, `#ff9e9e`, `white`, `white`]
             // Initializes Color Selectors and watches for selector click
 
             for (let i = 0; i < 4; i++) {
@@ -191,7 +191,6 @@ $(document).ready(function () {
 
                     <!-- Send Button -->
                     <button id="sendButton">
-                        <i class="fas fa-arrow-alt-circle-up" id="arrowImg"></i>
                     </button>
                 </form>
 
@@ -203,6 +202,7 @@ $(document).ready(function () {
 
         // Shows Chatroom
         $('body').prepend(chtroom);
+        $('body').css('background-color', '#83c6ff6e');
     }
 
     // Emits Messages to the server

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="nano.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Lancelot&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/40f80a8f17.js" crossorigin="anonymous"></script>
     <title>R'Chat</title>
 </head>
@@ -15,9 +15,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 
     <div id="outUserBox">
-        <h1 id="headerName">Please Enter Your Name</h1>
         <form id="formInputName">
-            <input id="inputName" placeholder="Username" required=""/>
+            <div id="nameFormBox">
+                <input type="text" id="inputName" required="">
+                <label for="inputName" id="inputNameLabel">Name</label>
+            </div>
             <button id="nameBtn">Enter</button>
         </form>
     </div>
