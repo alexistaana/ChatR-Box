@@ -51,10 +51,11 @@ body {
 }
 
 #inputForm {
+    position: relative;
+    bottom: 15px;
     background-color: white;
     border-radius: 100px;
     box-shadow: 0px 20px 30px rgba(10, 8, 8, 0.192), 0px 20px 30px rgba(10, 8, 8, 0.192);
-    margin-bottom: 10px;
     margin-left: 20px;
     margin-right: 20px;
 }
