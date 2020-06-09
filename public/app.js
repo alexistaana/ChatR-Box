@@ -28,7 +28,7 @@ $(document).ready(function () {
     // watches if user enters a name
     function WatchEnterUser() {
         $('#formInputName').submit(e => {
-            e.preventDefault();            
+            e.preventDefault();
 
             const name = $(e.currentTarget).find('#inputName');
 
@@ -129,6 +129,7 @@ $(document).ready(function () {
 
                     <!-- Send Button -->
                     <button id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
                     </button>
                 </form>
                 <div id="emojiSelector"> </div>
@@ -150,6 +151,8 @@ $(document).ready(function () {
             shortcuts: false,
             autocomplete: false
         });
+
+        ShowValidInput();
     }
 
     // When chatroom enters, adds user to the list
@@ -185,10 +188,8 @@ $(document).ready(function () {
     function CheckUserList(name) {
         let checkUser = false;
         for (let i = 0; i < currentArrUsers.length; i++) {
-            console.log(currentArrUsers[i].name)
-            console.log(name);
             if (name == currentArrUsers[i].name) {
-               checkUser = true;
+                checkUser = true;
             }
         }
 
@@ -209,11 +210,11 @@ $(document).ready(function () {
     }
 
     // Checks if Userlist updates every 3 seconds
-    function repeatCallToServerForUsers(){
-        secs = 2; 
+    function repeatCallToServerForUsers() {
+        secs = 2;
 
         CheckCallUsers();
-        setTimeout(repeatCallToServerForUsers, secs*1000);
+        setTimeout(repeatCallToServerForUsers, secs * 1000);
     }
 
 
@@ -394,6 +395,31 @@ $(document).ready(function () {
             selectedPickerText = 'sendMessage';
         })
     }
+
+    function ShowValidInput() {
+        let valid = true;
+
+        $(`#msgForm`).on('keyup', () => {
+            if ($(`#msgForm`).val() == '') {
+                valid = false;
+            }
+            else{
+                valid = true;
+            }
+
+            if (valid) {
+                $(`#sendButton`).css('z-index', '0');
+            }
+            else if (!valid) {
+                $(`#sendButton`).css('z-index', '-1');
+            }
+        })
+        
+        $(`#inputForm`).on('submit', () => {
+            $(`#sendButton`).css('z-index', '-1');
+        })
+    }
+
 
     // Run functions
     function Init() {

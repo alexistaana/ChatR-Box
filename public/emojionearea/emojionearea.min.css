@@ -684,6 +684,7 @@
     top: -66.7px;
     border: none;
     width: 4%;
+    transition: .6s;
 }
 
 .emojionearea.emojionearea-standalone .emojionearea-editor {
