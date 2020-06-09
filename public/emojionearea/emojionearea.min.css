@@ -680,11 +680,11 @@
     display: inline-block;
     width: auto;
     box-shadow: none;
-    left: 1568px;
-    top: -66.7px;
+    left: 93.2%;
+    bottom: 6.92vh;
     border: none;
     width: 4%;
-    transition: .6s;
+    transition: .6s
 }
 
 .emojionearea.emojionearea-standalone .emojionearea-editor {
