@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+    // global variables
     let socket;
     let colorPickr;
     let selectedPickerText;
@@ -8,7 +10,9 @@ $(document).ready(function () {
     let changeColorMsgReceive;
     let changeColorMsgSend;
     let TextOrMsg;
+    let emojiGrabber;
 
+    // User object
     class User {
         constructor(name, id, message) {
             this.name = name;
@@ -16,8 +20,9 @@ $(document).ready(function () {
             this.message = message;
         }
     }
+
+    // Creates new user
     let user = new User();
-    let userIndex;
 
     // watches if user enters a name
     function WatchEnterUser() {
@@ -37,99 +42,23 @@ $(document).ready(function () {
             // Grabs user connected id
             socket.on('connect', (e) => {
                 user.id = socket.id;
-                // Add connected user to the list of users online
+                // Add connected user to the list of users online and announces
                 AddUserToUserList();
                 AnnounceUserEntrance();
             })
 
-
             let colorDef = [`#1AC8DB`, `#ff9e9e`, `white`, `white`]
-            // Initializes Color Selectors and watches for selector click
 
+            // Initializes Color Selectors and watches for selector click
             for (let i = 0; i < 4; i++) {
                 CreateColorPicker(colorDef[i]);
             }
-            WatchForColorSelector();
 
-            // Watches/Calls to grab message and send to server
-            EmitAndGrabMessage();
-
-            DeleteUserFromList();
+            WatchForColorSelector(); // Adds watcher to see if user selects color
+            AddEmojiToInput(); // Adds watcher to see if user selects emoji to add
+            EmitAndGrabMessage(); // Watches/Calls to grab message and send to server
+            DeleteUserFromList(); // Calls function to watch for user disconnection
         });
-    }
-
-    function AddUserToUserList() {
-        socket.emit('user list update', user);
-
-        socket.on('user list update', e => {
-            let userAdd;
-
-            $('#userList').empty();
-
-            for (let i = 0; i < e.length; i++) {
-                userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
-                $('#userList').append(userAdd);
-
-                if (e.id == user.id) {
-                    userIndex = i;
-                }
-            }
-        })
-    }
-
-    function AnnounceUserEntrance() {
-        const intro =
-            [
-                `Look out it's <b class="introUser">${user.name}</b> coming through!`,
-                `<b class="introUser">${user.name}</b> came here to chat and chew bubblegum, he's all of out gum.`,
-                `It's a bird! It's a plane! NO IT'S <b class="introUser">${user.name}</b>!`,
-                `It's <b class="introUser">${user.name}</b>, first of her name, Queen of the Andals and the First Men, Breaker of Chains, Khaleesi of the Great Grass Sea.`,
-                `Here's <b class="introUser">${user.name}</b>, the King of the North!`,
-                `<b class="introUser">${user.name}</b>: YOU SHALL NOT PASS!!`,
-                `<b class="introUser">${user.name}</b> brought his sword, bow and axe to this fellowship.`
-            ]
-
-        let randomNum = Math.floor(Math.random() * 7);
-
-        const announce = `<div class="announcement">${intro[randomNum]}</div>`
-
-        socket.emit('announce name', announce);
-
-        socket.on('announce name', e => {
-            $('#messageList').append(e);
-        })
-    }
-
-    function AnnounceUserExit(e) {
-        let randomNum = Math.floor(Math.random() * 4);
-
-        const exit =
-            [
-                `if(!<b class="exitUser">${e}</b>){ std::cout << "GOODBYE!"}`,
-                `All of <b class="exitUser">${e}</b> Argon!`,
-                `See you in a 0001, <b class="exitUser">${e}</b>!`,
-                `<b class="exitUser">${e}</b> byte the dust.`
-            ]
-        const announce = `<div class="announcement">${exit[randomNum]}</div>`
-
-        $('#messageList').append(announce);
-    }
-
-    function DeleteUserFromList() {
-
-        socket.on('disconnect', (e, disconnectedUser) => {
-            let userAdd;
-
-            // Updates List
-            $('#userList').empty();
-            for (let i = 0; i < e.length; i++) {
-                userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
-                $('#userList').append(userAdd);
-            }
-
-            AnnounceUserExit(disconnectedUser);
-        })
-
     }
 
     // Function to load chatroom
@@ -186,13 +115,14 @@ $(document).ready(function () {
 
                 <!-- Input Area -->
                 <form action="#" id="inputForm">
-                    <input type="text" name="message" placeholder="Enter message..." id="msgForm">
+                    <input type="text" name="message" placeholder="Enter message..." id="msgForm" required="">
                     </input>
 
                     <!-- Send Button -->
                     <button id="sendButton">
                     </button>
                 </form>
+                <div id="emojiSelector"> </div>
 
             </div>
         </div>
@@ -202,7 +132,80 @@ $(document).ready(function () {
 
         // Shows Chatroom
         $('body').prepend(chtroom);
+
+        // Adds Emoji selector to the input area
         $('body').css('background-color', '#83c6ff6e');
+        emojiGrabber = $('#emojiSelector').emojioneArea({
+            standalone: true,
+            search: false,
+            shortcuts: false,
+            autocomplete: false
+        });
+    }
+
+    // When chatroom enters, adds user to the list
+    function AddUserToUserList() {
+        socket.emit('user list update', user);
+
+        socket.on('user list update', e => {
+            let userAdd;
+
+            $('#userList').empty();
+
+            for (let i = 0; i < e.length; i++) {
+                userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
+                $('#userList').append(userAdd);
+            }
+        })
+    }
+
+    // Announces user entrance
+    function AnnounceUserEntrance() {
+        socket.emit('announce name', user.name);
+
+        socket.on('announce name', e => {
+            $('#messageList').append(e);
+        })
+
+        // scrolls to the bottom of the messenger
+        const messageList = $('#messageList');
+        messageListHeight = messageList[0].scrollHeight;
+    }
+
+    // Deletes disconnected user from lsit
+    function DeleteUserFromList() {
+
+        socket.on('disconnect', (e, disconnectedUser, announce) => {
+            let userAdd;
+
+            // Updates List
+            $('#userList').empty();
+            for (let i = 0; i < e.length; i++) {
+                userAdd = `<p id="${e[i].id}" class="userName">${e[i].name}</p>`
+                $('#userList').append(userAdd);
+            }
+
+            AnnounceUserExit(announce);
+        })
+    }
+
+    // Announces user exit
+    function AnnounceUserExit(announce) {
+        $('#messageList').append(announce);
+
+        // scrolls to the bottom of the messenger
+        const messageList = $('#messageList');
+        messageListHeight = messageList[0].scrollHeight;
+    }
+
+    function AddEmojiToInput() {
+        emojiGrabber[0].emojioneArea.on("emojibtn.click", function (btn, e) {
+            let tempMsg = $('#msgForm').val();
+            let tempEmoji = $('#emojiSelector').html();
+
+            tempMsg = tempMsg + tempEmoji;
+            $('#msgForm').val(tempMsg);
+        });
     }
 
     // Emits Messages to the server
@@ -251,6 +254,9 @@ $(document).ready(function () {
         });
     }
 
+    // Color Picker Section
+
+    // Creates the Color pickers within the settings
     function CreateColorPicker(colorDef) {
         colorPickr = Pickr.create({
             el: '.colorpicker',
@@ -317,6 +323,7 @@ $(document).ready(function () {
         })
     }
 
+    // Watches the different color selectors
     function WatchForColorSelector() {
         $('#bubbleColorReceive').on('click', e => {
             e.preventDefault();

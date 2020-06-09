@@ -1,17 +1,17 @@
 {
-  "name": "rchat",
+  "name": "ChatR-Box",
   "version": "1.0.0",
-  "description": "A simple multi-way chatroom",
+  "description": "A simple chatroom using socket.io",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
+  "author": "Marco Alexi Sta Ana",
   "license": "ISC",
   "dependencies": {
+    "emojionearea": "^3.4.2",
     "express": "^4.15.2",
-    "nodemon": "^2.0.4",
     "socket.io": "^2.3.0"
   }
 }
