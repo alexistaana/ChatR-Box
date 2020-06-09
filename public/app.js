@@ -281,16 +281,9 @@ $(document).ready(function () {
             ],
 
             components: {
-
                 preview: true,
                 opacity: true,
                 hue: true,
-
-                interaction: {
-                    input: true,
-                    clear: true,
-                    save: true
-                }
             }
         });
 
