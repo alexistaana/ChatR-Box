@@ -6,12 +6,16 @@ const app = express();
 
 app.use(express.static('public'))
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
     res.sendFile(`${__dirname}/public/index.html`)
 })
 
-let server = app.listen(PORT, function () {
-    console.log('Server started!!');
+app.get('/getUsers', (req, res) => {
+    res.send({ users: users });
+})
+
+let server = app.listen(PORT, () => {
+    console.log('Server started! :)');
 })
 
 let io = socket(server);
@@ -58,7 +62,6 @@ function AnnounceUserExit(name) {
 
     return announce;
 }
-
 
 io.on('connection', socket => {
     console.log('Host Id Connected: ', socket.id);

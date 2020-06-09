@@ -11,6 +11,7 @@ $(document).ready(function () {
     let changeColorMsgSend;
     let TextOrMsg;
     let emojiGrabber;
+    let currentArrUsers;
 
     // User object
     class User {
@@ -27,37 +28,45 @@ $(document).ready(function () {
     // watches if user enters a name
     function WatchEnterUser() {
         $('#formInputName').submit(e => {
-            e.preventDefault();
-
-            // Connects to server
-            socket = io();
+            e.preventDefault();            
 
             const name = $(e.currentTarget).find('#inputName');
-            user.name = name.val();
-            name.val('');
 
-            // Loads chatroom on browser
-            LoadChatroom();
+            if (!CheckUserList(name.val())) {
 
-            // Grabs user connected id
-            socket.on('connect', (e) => {
-                user.id = socket.id;
-                // Add connected user to the list of users online and announces
-                AddUserToUserList();
-                AnnounceUserEntrance();
-            })
+                // Connects to server
+                socket = io();
 
-            let colorDef = [`#1AC8DB`, `#ff9e9e`, `white`, `white`]
+                user.name = name.val();
+                name.val('');
 
-            // Initializes Color Selectors and watches for selector click
-            for (let i = 0; i < 4; i++) {
-                CreateColorPicker(colorDef[i]);
+                // Loads chatroom on browser
+                LoadChatroom();
+
+                // Grabs user connected id
+                socket.on('connect', (e) => {
+                    user.id = socket.id;
+                    // Add connected user to the list of users online and announces
+                    AddUserToUserList();
+                    AnnounceUserEntrance();
+                })
+
+                let colorDef = [`#1AC8DB`, `#ff9e9e`, `white`, `white`]
+
+                // Initializes Color Selectors and watches for selector click
+                for (let i = 0; i < 4; i++) {
+                    CreateColorPicker(colorDef[i]);
+                }
+
+                WatchForColorSelector(); // Adds watcher to see if user selects color
+                AddEmojiToInput(); // Adds watcher to see if user selects emoji to add
+                EmitAndGrabMessage(); // Watches/Calls to grab message and send to server
+                DeleteUserFromList(); // Calls function to watch for user disconnection
             }
-
-            WatchForColorSelector(); // Adds watcher to see if user selects color
-            AddEmojiToInput(); // Adds watcher to see if user selects emoji to add
-            EmitAndGrabMessage(); // Watches/Calls to grab message and send to server
-            DeleteUserFromList(); // Calls function to watch for user disconnection
+            else {
+                window.alert("Name already exists inside the chatroom! Please try again!");
+                name.val('');
+            }
         });
     }
 
@@ -170,8 +179,51 @@ $(document).ready(function () {
             messageListHeight = messageList[0].scrollHeight;
             $('#messageList').scrollTop(messageListHeight);
         })
+    }
+
+    // Checks list if user name already exists
+    function CheckUserList(name) {
+        let checkUser = false;
+        for (let i = 0; i < currentArrUsers.length; i++) {
+            console.log(currentArrUsers[i].name)
+            console.log(name);
+            if (name == currentArrUsers[i].name) {
+               checkUser = true;
+            }
+        }
+
+        return checkUser;
+    }
+
+    // does a call to the server to get list of user names on the list
+    function CallUsersServer(callback, errorCallBack) {
+        const settings =
+        {
+            url: '/getUsers',
+            type: 'Get',
+            success: callback,
+            error: errorCallBack
+        }
+
+        $.ajax(settings);
+    }
+
+    // Checks if Userlist updates every 3 seconds
+    function repeatCallToServerForUsers(){
+        secs = 2; 
+
+        CheckCallUsers();
+        setTimeout(repeatCallToServerForUsers, secs*1000);
+    }
 
 
+    // Checks Call to server for users
+    function CheckCallUsers() {
+        CallUsersServer(res => {
+            currentArrUsers = res.users;
+        }, res => {
+            windows.alert('ERROR! Contact Developer if error persists!');
+        })
     }
 
     // Deletes disconnected user from lsit
@@ -346,6 +398,7 @@ $(document).ready(function () {
     // Run functions
     function Init() {
         WatchEnterUser();
+        repeatCallToServerForUsers();
     }
 
     Init();
