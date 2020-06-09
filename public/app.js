@@ -165,11 +165,13 @@ $(document).ready(function () {
 
         socket.on('announce name', e => {
             $('#messageList').append(e);
+            // scrolls to the bottom of the messenger
+            const messageList = $('#messageList');
+            messageListHeight = messageList[0].scrollHeight;
+            $('#messageList').scrollTop(messageListHeight);
         })
 
-        // scrolls to the bottom of the messenger
-        const messageList = $('#messageList');
-        messageListHeight = messageList[0].scrollHeight;
+
     }
 
     // Deletes disconnected user from lsit
@@ -196,6 +198,7 @@ $(document).ready(function () {
         // scrolls to the bottom of the messenger
         const messageList = $('#messageList');
         messageListHeight = messageList[0].scrollHeight;
+        $('#messageList').scrollTop(messageListHeight);
     }
 
     function AddEmojiToInput() {
