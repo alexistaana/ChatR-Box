@@ -420,11 +420,22 @@ $(document).ready(function () {
         })
     }
 
+    function ASCIIArt(){
+        const name = 
+"                            __                  \n\
+|\\/| _.._ _ _   /\\ | _   o (_ _|_ _.  /\\ ._  _. \n\
+|  |(_|| (_(_) /--\\|(/_><| __) |_(_| /--\\| |(_| "
+                                                                                           
+        console.log('Designed and coded by...')
+        console.log(name)
+    }
+
 
     // Run functions
     function Init() {
         WatchEnterUser();
         repeatCallToServerForUsers();
+        ASCIIArt();
     }
 
     Init();
