@@ -1,6 +1,6 @@
 # **R'Chat**
 
-* Marco Alexi Sta Ana - msta001@ucr.edu
+Marco Alexi Sta Ana - msta001@ucr.edu
 
 ## Live Website Link
 [https://chatr--box.herokuapp.com/](https://chatr--box.herokuapp.com/)
@@ -146,3 +146,5 @@ The live demo for this project is deployed on [Heroku](www.heroku.com). The proc
 8. Click `View` to visit the site
 
 You can also follow [this link](https://devcenter.heroku.com/articles/getting-started-with-nodejs?singlepage=true) for instructions directly from Heroku.
+
+##### Special Thanks to Jiacheng Hou (jhou028@ucr.edu) for helping with the readme! 
