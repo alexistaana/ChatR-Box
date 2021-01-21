@@ -12,6 +12,6 @@
   "dependencies": {
     "emojionearea": "^3.4.2",
     "express": "^4.15.2",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   }
 }
