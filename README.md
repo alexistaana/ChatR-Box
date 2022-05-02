@@ -1,4 +1,4 @@
-# **R'Chat**
+# **ChatR'Box**
 
 Marco Alexi Sta Ana - msta001@ucr.edu
 
