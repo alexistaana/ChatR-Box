@@ -72,7 +72,7 @@ The client side gets input from the user, send the chat message to the server an
 
 ## Deliverable Report
 
-### R'Chat in Action
+### ChatR'Box in Action
 
 #### Login
 
