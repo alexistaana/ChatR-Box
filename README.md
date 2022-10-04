@@ -50,7 +50,7 @@ The server receiving client's inputs and send the output back to the client side
 |     :---:     |     ---     |
 |  ChatFactory  | - Grab chat message from the clients <br> - Send the Chat to the Chatroom (server) |
 | ListOfUsers | - Get newly added/removed users from the clients <br>  - Send the newly added/removed usernames to Chatroom |
-| Chatroom (Server) | - Get mew Chat from ChatFactory <br> - Get updated users from NumberOfUsers <br> - Send new Chat and updated usernames to Client |
+| Chatroom (Server) | - Get new Chat from ChatFactory <br> - Get updated users from NumberOfUsers <br> - Send new Chat and updated usernames to Client |
 
 #### Client Side
 
@@ -132,7 +132,7 @@ A user can only see new messages after he/she entered the chat room. Once a user
 
 ![Chat history demo animation](diagrams/Chat_History.gif)
 
-### Deploying R'Chat
+### Deploying ChatR'Box
 
 The live demo for this project is deployed on [Heroku](www.heroku.com). The process is simple:
 
